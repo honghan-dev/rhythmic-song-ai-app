@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Song Generator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #songOutput { white-space: pre-wrap; border: 1px solid #ccc; padding: 10px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Song Generator</h1>
+  <form id="songForm">
+    <label for="words">Enter a word or two:</label>
+    <input type="text" id="words" name="words" required>
+    <button type="submit">Generate Song</button>
+  </form>
+  <h2>Generated Song:</h2>
+  <div id="songOutput"></div>
+
+  <script>
+    document.getElementById('songForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const words = document.getElementById('words').value;
+      const response = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ words })
+      });
+      const data = await response.json();
+      if (data.song) {
+        document.getElementById('songOutput').innerText = data.song;
+      } else {
+        document.getElementById('songOutput').innerText = "Error generating song.";
+      }
+    });
+  </script>
+</body>
+</html>
